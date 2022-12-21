@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 # Prepping data for Question Quality model
 
@@ -40,7 +41,7 @@ def quality_60k_full_clean():
 
     :return: cleaned dataset to be passed to hypothesis testing and visualization modules.
     """
-    dirty_data = pd.read_csv("../data/Quality_60k/data.csv")
+    dirty_data = pd.read_csv("data/Quality_60k/data.csv")
     
     dirty_data = create_and_clean_text_column(dirty_data)
     
@@ -48,7 +49,7 @@ def quality_60k_full_clean():
     
     cleaned_data = dirty_data[['text','target']]
     
-    cleaned_data.to_csv('../data/Quality_60k/data_clean.csv')
+    cleaned_data.to_csv('data/Quality_60k/data_clean.csv')
     
     return cleaned_data
 
@@ -56,8 +57,8 @@ def quality_60k_full_clean():
 
 def quality_python_full_clean():
     
-    questions = pd.read_csv("../data/QA_python/Questions.csv")
-    answers = pd.read_csv("../data/QA_python/Answers.csv")
+    questions = pd.read_csv("data/QA_python/Questions.csv", encoding='latin1')
+    answers = pd.read_csv("data/QA_python/Answers.csv", encoding='latin1')
     
     questions = questions.iloc[-100000:]
     answers = answers[answers['ParentId'].isin(questions['Id'])]
@@ -66,9 +67,9 @@ def quality_python_full_clean():
     
     questions['answer_count'] = [len(answers[answers['ParentId']==x]) for x in list(questions['Id'])]
     
-    cleaned_data = questions[['text','answer_count', 'score']]
+    cleaned_data = questions[['text','answer_count', 'Score']]
     
-    cleaned_data.to_csv('../data/QA_python/data_clean.csv')
+    cleaned_data.to_csv('data/QA_python/data_clean.csv')
     
     return cleaned_data
 
@@ -76,8 +77,8 @@ def quality_python_full_clean():
 
 def tags_full_clean():
     
-    questions = pd.read_csv("../data/QA_all/Questions.csv")
-    tags = pd.read_csv("../data/QA_all/Tags.csv")
+    questions = pd.read_csv("data/QA_all/Questions.csv", encoding='latin1')
+    tags = pd.read_csv("data/QA_all/Tags.csv", encoding='latin1')
     
     questions = questions.iloc[-200000:]
     tags = tags[tags['Id'].isin(questions['Id'])]
@@ -86,8 +87,8 @@ def tags_full_clean():
     
     questions['tags'] = questions['Id'].apply(lambda x: \
                                               ([str(y) for y in list(tags[tags['Id']==x]['Tag'])]))
-    cleaned_data = questions[['text', 'tags']]
+    cleaned_data = questions[['Id', 'text', 'tags']]
         
-    cleaned_data.to_csv('../data/QA_all/data_clean.csv')
+    cleaned_data.to_csv('data/QA_all/data_clean.csv')
     
     return cleaned_data

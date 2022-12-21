@@ -28,6 +28,63 @@ plt.rcParams.update(params)
 plt.style.use('seaborn-whitegrid')
 sns.set_style("white")
 
+def plot_tag_trend(tag):
+    
+    tag_slopes = {}
+
+    q_df = pd.read_csv('./data/QA_all/Questions.csv', encoding='latin1')
+    t_df = pd.read_csv('./data/QA_all/Tags.csv', encoding='latin1')
+    
+    q_df['time'] = pd.to_datetime(q_df['CreationDate'], infer_datetime_format=True)
+    q_df['quarter'] = [x.quarter for x in q_df['time']]
+    q_df['year'] = [x.year for x in q_df['time']]
+    q_df['quarter'] = q_df['year'].apply(str).apply(lambda x: x[-2:]) + '-' + q_df['quarter'].apply(str)
+    
+    tag_per_id = t_df.groupby('Id').size()
+    id_per_tag = t_df.groupby('Tag').size()
+
+    tagid_df = pd.DataFrame()
+    tagid_df['Id'] = tag_per_id.index.values
+    tagid_df['tag_count'] = tag_per_id.values
+
+    idtag_df = pd.DataFrame()
+    idtag_df['tag'] = id_per_tag.index.values
+    idtag_df['id_count'] = id_per_tag.values
+    idtag_df = idtag_df.sort_values(by='id_count', ascending=True).reset_index().drop('index', axis=1)
+    idtag_df = idtag_df.iloc[-256:]
+    top_tags = idtag_df.tag.values
+
+    all_quarters = list(q_df['quarter'].unique())
+    for tag in top_tags:
+        tag_slopes[tag] = {'quarter':['08-3'], 'pct':[], 'slope':[0]}
+
+    i = 0
+
+    for quarter in all_quarters:
+        q_df2 = q_df[q_df['quarter']==quarter].copy()
+        t_df2 = t_df[t_df['Id'].isin(q_df2['Id'].unique())].copy()
+        for tag in top_tags:
+            if i:
+                tag_slopes[tag]['quarter'].append(quarter)
+            this_pct = len(t_df2[t_df2['Tag']==tag])/len(q_df2)
+            tag_slopes[tag]['pct'].append(this_pct)
+            if i:
+                prev_pct = tag_slopes[tag]['pct'][-2]
+                tag_slopes[tag]['slope'].append(this_pct-prev_pct)
+        i += 1
+
+    fig, ax = plt.subplots(figsize=(15,8))
+    data = pd.DataFrame(tag_slopes[tag])
+    sns.lineplot(data=data, y='pct', x='quarter', marker='o')
+    ax.set_title(f"Change in tag usage for tag: '{tag}'")
+    plt.show()
+    
+    pass
+
+
+
+
+
 
 def sample_plot_1():
     """
