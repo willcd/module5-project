@@ -203,10 +203,10 @@ After experimenting with these options, the One-vs-Rest classifier made the most
 Since measures like accuracy, f1, etc become cumbersome when dealing with a vast number of target classes, there are two main metrics I used to determine the performance of the model.
 
 #### Hamming loss
-    - A calculation of similarity between two lists. This ranges from 0-1 (0 being best), and in this case, the values tend to be very small due to the large number of possible tags.
+   - A calculation of similarity between two lists. This ranges from 0-1 (0 being best), and in this case, the values tend to be very small due to the large number of possible tags.
 #### Top-20 Prediction metrics
-    - This is my own method of determining how well the model does across all of the predictions. For each post, using the predicted probabilities, I can then calculate the following based on whether each post's actual set of tags are in the predicted list. The goal is to have all of the 'true' tags in the suggested tag list.
-    - The two main measures are:
+   - This is my own method of determining how well the model does across all of the predictions. For each post, using the predicted probabilities, I can then calculate the following based on whether each post's actual set of tags are in the predicted list. The goal is to have all of the 'true' tags in the suggested tag list.
+   - The two main measures are:
         - % of tags that exist in their post's predicted top-20
         - Average score of posts' tag set that are in the predicted top-20
 
