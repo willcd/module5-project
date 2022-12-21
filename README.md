@@ -252,6 +252,8 @@ In both components of this project, the results suggest that these features coul
 
 Even using a relatively small sample of posts, this model can be used to alert users when their post is likely to be low-quality.
 
+Because there is still a %10 chance or so of mis-classifying a post, the alert would likely need to be worded so as not to be definitively 'this is a bad post!'. Finding the right balance between being clear and being respectful would be paramount.
+
 Assuming Stack Overflow has a vast collection of more data, a larger and more robust model could be built that could likely do even better at flagging low-quality posts.
 
 Overall, the ability to alert users could save time (both human and on the technical backend) in having to identify poor questions and either reach out to have them edited, or remove them. As well, it would hopefully lead to users being more likely to revise their questions and end up with a better contribution to the community.
