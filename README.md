@@ -1,6 +1,6 @@
 # Stack Overflow - Question Modeling for Quality-of-Life
 
-**Authors**: Will Dougherty
+**Author**: Will Dougherty
 
 ## Overview
 
@@ -81,7 +81,7 @@ Finally, fitting the LogisticRegression model with tuned hyperparameters allows 
 
 #### Evaluation
 
-So we see a strong result here. With 89% of the 'low quality' label, and 90% of the 'high quality' label correctly predicted, we don't have a skew either way that would disproportionately affect either target class. False positives would allow low-quality posts to slip through, and false negatives would annoy users who are writing a high-quality question.
+So we see a strong result here. With 89% of the 'low quality' label, and 89% of the 'high quality' label correctly predicted, we don't have a skew either way that would disproportionately affect either target class. False positives would allow low-quality posts to slip through, and false negatives would annoy users who are writing a high-quality question.
 
 ##### Vs. Baseline model
 
@@ -218,17 +218,65 @@ Since measures like accuracy, f1, etc become cumbersome when dealing with a vast
 
 ![graph3](./images/tag_scores.png)
 
+### Evaluation
 
+Based on the scores above, and the visualizations of the results, the results are strong and encouraging.
 
-## Conclusions
+Across all tags (not just the 2,000 used to build the model) over 75% are present in the predicted top-20. Just among the top 2,000, almost 89% are present.
 
-Provide your conclusions about the work you've done, including any limitations or next steps.
+The average proportion of a post's tags that are present in the predicted top-20 is 75%, and almost half are perfectly predicted.
+
+The hamming loss metric is very very low, lower than the other results from the modelling experiments notebook.
 
 ***
-Questions to consider:
-* What would you recommend the business do as a result of this work?
-* What are some reasons why your analysis might not fully solve the business problem?
-* What else could you do in the future to improve this project?
+
+In application to the business, this would be a good way to suggest tags to users. Since this is a relatively subjective thing (exactly which tags or amount of tags is best for a question is very subjective) complete accuracy may not be necessary. The intuition here is that this can be a useful tool for helping users select the proper tags at the moment they're posting it, and seeing them presented would save the user time.
+
+In addition, it's not hard to imagine an implementation in which the user can either select or remove the suggested tags from the predicted list, and more results could populate it, increasing the likelihood of the 'true' tags appearing.
+
+***
+
+Although this is a large dataset, this is only 10% of the Stack Overflow questions from this period (2008-2016). With the full dataset, and more robust computational resources, an even larger and more complete model could possibly be constructed and yield even higher performance.
+
+***
+***
+
+# Conclusions
+
+***
+## Recommendations
+
+In both components of this project, the results suggest that these features could feasibly be developed based on the performance of the models.
+
+### Question Quality
+
+Even using a relatively small sample of posts, this model can be used to alert users when their post is likely to be low-quality.
+
+Assuming Stack Overflow has a vast collection of more data, a larger and more robust model could be built that could likely do even better at flagging low-quality posts.
+
+Overall, the ability to alert users could save time (both human and on the technical backend) in having to identify poor questions and either reach out to have them edited, or remove them. As well, it would hopefully lead to users being more likely to revise their questions and end up with a better contribution to the community.
+
+### Tag Suggestion
+
+Similarly, the tag prediction model here shows that it's possible to extend its use to creating a top-20 list of suggested tags, and that the predictions are accurate and will likely lead to users better tagging their posts.
+
+Based on analysis, using a model with data only from recent post history is likely the best choice, to make sure that up-to-date tag and question relationships are being included in the model.
+
+## Limitations and Future Work
+
+Especially with the Tag Suggestion model, more work could likely be done to increase the various metrics and scores, and ensure that more of the 'true' tags are included in the predicted top-20 lists. More memory and computational resources would allow for larger and more in-depth modelling, and exploration of different, more expensive but possibly higher-performing models.
+
+Beyond these models and goals, there are two areas I especially noticed might warrant further work.
+
+### Tailored quality alerts
+
+Exploration of whether there is a way to identify and alert users as to specific issues with a question that can be improved.
+
+### Tag trend prediction
+
+Exploration of whether predicting tag trends would be feasible, and possible connections to other datasets and intersections with the wider tech world.
+
+***
 ***
 
 ## For More Information
