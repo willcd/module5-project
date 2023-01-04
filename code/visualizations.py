@@ -8,25 +8,26 @@ import matplotlib.pyplot as plt
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 from matplotlib.ticker import FuncFormatter
 import seaborn as sns
+from sklearn.metrics import ConfusionMatrixDisplay
 
 # Standard data manipulation packages
 import pandas as pd
 import numpy as np
 
-matplotlib_axes_logger.setLevel('ERROR')
+#matplotlib_axes_logger.setLevel('ERROR')
 
 # Set specific parameters for the visualizations
-large = 22; med = 16; small = 12
-params = {'axes.titlesize': large,
-          'legend.fontsize': med,
-          'figure.figsize': (16, 10),
-          'axes.labelsize': med,
-          'xtick.labelsize': med,
-          'ytick.labelsize': med,
-          'figure.titlesize': large}
-plt.rcParams.update(params)
-plt.style.use('seaborn-whitegrid')
-sns.set_style("white")
+#large = 22; med = 16; small = 12
+#params = {'axes.titlesize': large,
+#          'legend.fontsize': med,
+#          'figure.figsize': (16, 10),
+#          'axes.labelsize': med,
+#          'xtick.labelsize': med,
+#          'ytick.labelsize': med,
+#          'figure.titlesize': large}
+#plt.rcParams.update(params)
+#plt.style.use('seaborn-whitegrid')
+#sns.set_style("white")
 
 def plot_tag_trend(tag):
     
@@ -86,45 +87,24 @@ def plot_tag_trend(tag):
 
 
 
-def sample_plot_1():
+def conf_matrix(y_test, y_pred):
     """
     This is a sample visualization function to show what one looks like.
     The code is borrowed from https://www.machinelearningplus.com/plots/top-50-matplotlib-visualizations-the-master-plots-python/
 
     This function takes no arguments and shows a nice visualization without having all your code in the notebook itself.
     """
-
-    # Set size of figure
-    fig = plt.figure(figsize=(16, 10), dpi=80)  
-
-
-    # Import dataset 
-    midwest = pd.read_csv("https://raw.githubusercontent.com/selva86/datasets/master/midwest_filter.csv")
-
-    # Prepare Data 
-    # Create as many colors as there are unique midwest['category']
-    categories = np.unique(midwest['category'])
-    colors = [plt.cm.tab10(i/float(len(categories)-1)) for i in range(len(categories))]
-
-    # create ax element
-    fig, ax = plt.subplots(figsize=(16, 10), dpi= 80, facecolor='w', edgecolor='k')
-
-    # Draw Plot for Each Category
-    for i, category in enumerate(categories):
-        plt.scatter('area', 'poptotal', 
-                    data=midwest.loc[midwest.category==category, :], 
-                    s=20, c=colors[i], label=str(category))
-
-    # Decorations
-    plt.gca().set(xlim=(0.0, 0.1), ylim=(0, 90000),
-                  xlabel='Area', ylabel='Population')
-
-    plt.xticks(fontsize=12); plt.yticks(fontsize=12)
-    ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
-
-    plt.title("Scatterplot of Midwest Area vs Population", fontsize=22)
-    plt.legend(fontsize=12)
-    plt.savefig('./images/viz1.png', transparent = True)
+    sns.set_context('talk')
+    fig = plt.figure(figsize=(8,8), dpi=80);
+    axis = fig.gca()
+    ConfusionMatrixDisplay.from_predictions(y_test, y_pred, normalize='true', ax=axis, values_format='.1%', colorbar=False);
+    axis.set_xticklabels(['LQ', 'HQ'])
+    axis.set_yticklabels(['LQ', 'HQ'])
+    axis.set_xlabel('Predicted')
+    axis.set_ylabel('Actual')
+    plt.title('Results: Actual vs. Predicted Quality');
+    
+    plt.savefig('./images/conf_matrix.png', transparent = True)
     
     plt.show()  
     
