@@ -62,6 +62,11 @@ However, as we'll see, the smaller model does seem to have correllation with tho
 
 ### Methodology and Goals
 
+For a little reading on some meta discussion of the problem of low-quality questions, this is a very insightful page from tghe "Meta.StackExchange.com" site:
+* <a id="https://meta.stackexchange.com/questions/56817/can-we-prevent-some-of-the-low-quality-questions-from-entering-our-system">Atwood, Jeff. (2010). "Can we prevent some of the low-quality questions from entering our system?"</a>
+
+***
+
 In order to predict quality, the text must be cleaned and vectorized, and class imbalance addressed.
 
 For modelling, Logistic Regression is relatively cheap (in system resources and training time) and well-suited to this relatively straightforward modelling problem.
@@ -128,6 +133,11 @@ https://www.kaggle.com/datasets/stackoverflow/stacksample?datasetId=265&sortBy=c
 
 It is structured identically to the Python Q&A dataset, but includes posts with all tags. Limiting it to the 'Python' tagged posts creates issues with how it's modelled and validated.
 
+#### Introductory reading on tags
+
+I found this article to be inspiring and gave me a good feel for the broad strokes and diversity of tags in the data:
+* <a id="https://minimaxir.com/2018/02/stack-overflow-questions/">A Visual Overview of Stack Overflow's Question Tags</a>
+
 ### Methodology and Goals
 
 The goal is a model that can provide suggested tags to a user, before they post their question. Users are given an entry field to enter tags, but it only auto-completes when you start typing. This can enable better and faster tagging for users, and facilitate better searching and generation of 'related post'-type features on the site.
@@ -171,13 +181,13 @@ RBO (Rank Biased Overlap) is a measure of similarity between two ranked lists, a
 
 RBO is interpreted as a measure of similarity, with 1.0 being exactly the same, and 0.0 as completely different lists.
 
-RBO resources:
+* RBO resources:
 
-https://github.com/ragrawal/measures/blob/master/measures/rankedlist/RBO.py
+    * https://github.com/ragrawal/measures/blob/master/measures/rankedlist/RBO.py
 
-https://ragrawal.wordpress.com/2013/01/18/comparing-ranked-list/
+    * https://ragrawal.wordpress.com/2013/01/18/comparing-ranked-list/
 
-http://codalism.com/research/papers/wmz10_tois.pdf
+    * http://codalism.com/research/papers/wmz10_tois.pdf
 
 ![graph3](./images/RBO.png)
 
@@ -217,7 +227,10 @@ After experimenting with these options, the One-vs-Rest classifier made the most
 Since measures like accuracy, f1, etc become cumbersome when dealing with a vast number of target classes, there are two main metrics I used to determine the performance of the model.
 
 #### Hamming loss
-   - A calculation of similarity between two lists. This ranges from 0-1 (0 being best), and in this case, the values tend to be very small due to the large number of possible tags.
+   * A calculation of similarity between two lists. This ranges from 0-1 (0 being best), and in this case, the values tend to be very small due to the large number of possible tags.
+   * In-depth paper on multi-label algorithms, with lots of info about hamming loss:
+        * <a id="https://www.researchgate.net/profile/Mohammad-Sorower-2/publication/266888594_A_Literature_Survey_on_Algorithms_for_Multi-label_Learning/links/57fdb69308ae6750f80665b5/A-Literature-Survey-on-Algorithms-for-Multi-label-Learning.pdf">Sorower, Mohammad. (2023). A Literature Survey on Algorithms for Multi-label Learning.</a>
+   
 #### Top-20 Prediction metrics
    - This is my own method of determining how well the model does across all of the predictions. For each post, using the predicted probabilities, I can then calculate the following based on whether each post's actual set of tags are in the predicted list. The goal is to have all of the 'true' tags in the suggested tag list.
    - The two main measures are:
@@ -302,6 +315,13 @@ Exploration of whether predicting tag trends would be feasible, and possible con
 ## For More Information
 
 Please review our full analysis in the EDA and prep/modelling notebooks in the ./code folder.
+
+## Citations
+
+* <a id="https://minimaxir.com/2018/02/stack-overflow-questions/">Woolf, Max. (2018). A Visual Overview of Stack Overflow's Question Tags.</a>
+* <a id="http://codalism.com/research/papers/wmz10_tois.pdf">Webber, Moffat, and Zobel. (2010). A Similarity Measure for Indefinite Rankings.</a>
+* <a id="https://www.researchgate.net/profile/Mohammad-Sorower-2/publication/266888594_A_Literature_Survey_on_Algorithms_for_Multi-label_Learning/links/57fdb69308ae6750f80665b5/A-Literature-Survey-on-Algorithms-for-Multi-label-Learning.pdf">Sorower, Mohammad. (2023). A Literature Survey on Algorithms for Multi-label Learning.</a>
+* <a id="https://meta.stackexchange.com/questions/56817/can-we-prevent-some-of-the-low-quality-questions-from-entering-our-system">Atwood, Jeff. (2010). "Can we prevent some of the low-quality questions from entering our system?"</a>
 
 ## Repository Structure
 
