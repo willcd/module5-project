@@ -71,7 +71,16 @@ In order to predict quality, the text must be cleaned and vectorized, and class 
 
 For modelling, Logistic Regression is relatively cheap (in system resources and training time) and well-suited to this relatively straightforward modelling problem.
 
-With only the binary classification to deal with, a confusion matrix will be the best way to see the results. A balanced pair of True Positive/False Positive accuracy scores will be used to validate the model.
+### Target Metrics
+
+#### Balanced Accuracy
+
+I will target the balanced accuracy score (using 'balanced_accuracy_score()') to judge the best classifier. Since this model will be used to predict quality, and generate alerts if a question is likely to be low-quality (which would need editing or removal from the site) I don't want to skew either towards False Positives or False Negatives, so recall for either class would be insufficient.
+
+In addition, simple 'accuracy' would be skewed by class imbalance, so the balanced accuracy takes this into account. This will help to ensure that I don't have too many instances of low-quality posts slipping through, nor high-quality posts mislabelled as low-quality, annoying those users unnecessarily.
+
+Besides simply calculating the score, I'll also use confusion matrices to see it visually at a glance, especially if there are more than 2 targets.
+
 
 ![graph1](./images/qa_python_clean.png)
 
@@ -99,11 +108,11 @@ Finally, fitting the LogisticRegression model with tuned hyperparameters allows 
 
 #### Evaluation
 
-So we see a strong result here. With 89% of the 'low quality' label, and 89% of the 'high quality' label correctly predicted, we don't have a skew either way that would disproportionately affect either target class. False positives would allow low-quality posts to slip through, and false negatives would annoy users who are writing a high-quality question.
+So we see a strong result here. With 87% of the 'low quality' label, and 85% of the 'high quality' label correctly predicted, we don't have a strong skew either way that would disproportionately affect either target class. False positives would allow low-quality posts to slip through, and false negatives would annoy users who are writing a high-quality question.
 
 ##### Vs. Baseline model
 
-A baseline model would simply predict '0' for every class, and thus achieve an accuracy of 67% since 2/3 of the samples are in the '0' class. Thus, the model does a good job of not only improving on accuracy, but actually distinguishing the two classes, and balancing it almost perfectly.
+A baseline model would simply predict '0' for every class, and thus achieve an accuracy of 67% since 2/3 of the samples are in the '0' class. Thus, the model does a good job of not only improving on accuracy, but actually distinguishing the two classes, and balancing it very well.
 
 ***
 
