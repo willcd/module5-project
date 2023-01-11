@@ -96,11 +96,9 @@ Based on EDA, I was able to find an optimal (or at least high-performing) method
 This can be seen in the first few columns above.
 
 ***
-In order to test the model, I'll split it into train and test portions.
+In order to test the model, I'll use the included holdout set.
 
-I'll simply select the first 80% and the last 20%, since a real-world application would always be using a model built on past posts that are then tested on future posts.
-
-In addition, class imbalance is an issue. Using the RandomOverSampler, we can generate more of the '1' (high-quality) samples, so as to help the model train properly.
+Since class imbalance is an issue, I opt to use the RandomOverSampler, so we can generate a balanced proportion of class '1' (high-quality) samples, so as to help the model train properly.
 
 Finally, fitting the LogisticRegression model with tuned hyperparameters allows us to see plot how well it does at predicting the two classes.
 
