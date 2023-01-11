@@ -20,30 +20,37 @@ def clean_text(s):
     s = re.compile(r'<.*?>').sub(r'', s)
     # remove links
     s = re.compile(r'https?://\S+|www\.\S+').sub(r'', s)
+    # lowercase
     s = s.lower()
     s = utils.to_unicode(s)
+    # implement gensim filters
     for f in filters:
         s = f(s)
     return s
 
-def create_and_clean_text_column(df):
+def clean_text_60k(text):
+    # remove code
+    text = re.sub('<pre><code>.*?</code></pre>', '', text)
+    # remove html tags
+    text = re.compile(r'<.*?>').sub(r'', text)
+    # remove links
+    text = re.compile(r'https?://\S+|www\.\S+').sub(r'', text)
+    # remove linefeeds, non-letter/numbers, and whitespace
+    text = re.sub(r'\n',' ', text)
+    text = re.sub(r'\W', " ", text)
+    text = re.sub(" +", " ", text)
+    return text
+
+def create_and_clean_text_column(df, text_cleaner):
     df['text'] = df['Title'] + ' ' + df['Body']
-    df['text'] = df['text'].apply(clean_text)
+    df['text'] = df['text'].apply(text_cleaner)
     return df
 
 def quality_60k_full_clean():
-    """
-    This is the one function called that will run all the support functions.
-    Assumption: 
-        - Your data files will be saved in a data folder and named "dirty_data.csv"
-        - OR you might read directly from a few urls
-        - this code is guidance, not rules
-
-    :return: cleaned dataset to be passed to hypothesis testing and visualization modules.
-    """
-    dirty_data = pd.read_csv("data/Quality_60k/data.csv")
-    
-    dirty_data = create_and_clean_text_column(dirty_data)
+    dirty_data_train = pd.read_csv("data/Quality_60k/train.csv")
+    dirty_data_valid = pd.read_csv("data/Quality_60k/valid.csv")
+    dirty_data = pd.concat([dirty_data_train, dirty_data_valid], ignore_index=True)
+    dirty_data = create_and_clean_text_column(dirty_data, clean_text_60k)
     
     dirty_data['target'] = dirty_data['Y'].map(lambda x: 1 if x=='HQ' else 0)
     
@@ -63,7 +70,7 @@ def quality_python_full_clean():
     questions = questions.iloc[-100000:]
     answers = answers[answers['ParentId'].isin(questions['Id'])]
     
-    questions = create_and_clean_text_column(questions)
+    questions = create_and_clean_text_column(questions, clean_text)
     
     questions['answer_count'] = [len(answers[answers['ParentId']==x]) for x in list(questions['Id'])]
     
@@ -83,7 +90,7 @@ def tags_full_clean():
     questions = questions.iloc[-200000:]
     tags = tags[tags['Id'].isin(questions['Id'])]
     
-    questions = create_and_clean_text_column(questions)
+    questions = create_and_clean_text_column(questions, clean_text)
     
     questions['tags'] = questions['Id'].apply(lambda x: \
                                               ([str(y) for y in list(tags[tags['Id']==x]['Tag'])]))

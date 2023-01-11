@@ -4,7 +4,7 @@
 
 ## Overview
 
-With millions of questions and answers, Stack Overflow is a uniquely positioned resource for the coding community. Though often criticized and complained about, it's an invaluable tool to find answers and discussion about very specific coding problems very quickly.]
+With millions of questions and answers, Stack Overflow is a uniquely positioned resource for the coding community. Though often criticized and complained about, it's an invaluable tool to find answers and discussion about very specific coding problems very quickly.
 
 In this project, I used Natural Language Processing (NLP) to predict both quality and the tags for Stack Overflow questions, to provide the foundation for implementing features that could be used in the moment of posting - that is, a user could be alerted if their post is likely to be low-quality, and tags could be suggested based on the text of the question. In both cases, the models do a good job of accomplishing their objectives, and the analysis that led to them informs their best usage and implementation.
 
@@ -12,7 +12,16 @@ In this project, I used Natural Language Processing (NLP) to predict both qualit
 
 Stack Overflow also occupies a unique position in that it is in the form of a Q&A platform, but is often used as a wiki, or general knowledge base. With aggressive post moderation (i.e. removal of duplicate/already-answered questions) and an upvote system, the focus of the site is on both quality, and ease of search.
 
-Thus the two main components of this project are:
+#### Stakeholder for project
+
+The targeted stakeholder for this project is Stack Overflow itself, specifically the teams/departments in charge of moderation and the posting system.
+
+As well, this type of work is potentially applicable to other similar situations on other websites that utilize Q&A, especially those with upvoting, tagging, etc that would be directly benefitted by the results of this project.
+
+***
+***
+
+The two main components of this project are:
 - Question quality
 - Tagging
 
@@ -33,15 +42,19 @@ Because of the subjective nature of tagging, it would be best to suggest the top
 
 ### Data
 
-There are several datasets of Stack Overflow post data, and for this component I am using two different datasets:
+There are several datasets of Stack Overflow post data, and for this component I am using two different datasets.
+
+To run this code yourself, please download the data from the links below and place the files in folders as described.
 
 - 60k Stack Overflow Questions with Quality Rating
 https://www.kaggle.com/datasets/imoore/60k-stack-overflow-questions-with-quality-rate
+- Importing data: download archive, and extract 'train.csv' and 'valid.csv' to 'data/Quality_60k'
 
 This is used to build the model, as it contains ground-truth quality ratings. It is limited to only posts with the 'python' tag.
 
 - Python Questions from Stack Overflow
 https://www.kaggle.com/datasets/stackoverflow/pythonquestions
+- Importing data: download archive, and extract 'Questions.csv', 'Answers.csv', and 'Tags.csv' to 'data/QA_python'
 
 This is much larger, and is used to see how the smaller dataset's model compares against a larger dataset. This is not used to build the model because there is no concrete 'quality' rating, and only things like 'Score' and 'answer_count' are available.
 
@@ -107,10 +120,11 @@ However, this is encouraging to see such a clear gradient from left to right, wh
 
 ### Data
 
-For this component, I will use this large dataset:
+For this component, I will use this dataset. As before, to run the code yourself download from the link below and place the data in the folder as described.
 
 - StackSample: 10% of Stack Overflow Q&A
 https://www.kaggle.com/datasets/stackoverflow/stacksample?datasetId=265&sortBy=commentCount&select=Questions.csv
+- Importing data: download archive, and extract 'Questions.csv', 'Answers.csv', and 'Tags.csv' to 'data/QA_all'
 
 It is structured identically to the Python Q&A dataset, but includes posts with all tags. Limiting it to the 'Python' tagged posts creates issues with how it's modelled and validated.
 
@@ -141,7 +155,7 @@ As said before, a balance has to be found regarding the number of samples to bui
 ***
 ### Number of Samples
 
-The dataset has 1,264,216 posts, with many more answers, and tags for each post.
+The dataset has 1,264,216 posts, with many more answers, and 1-5 tags for each post.
 
 Since it would be prohibitive to build a model with every sample unless it was obviously much more accurate, I investigated whether the tag usage changes drastically over time, which would suggest that smaller models built using a subset of the data that is more similar to the data to be predicted would yield better results.
 
@@ -252,7 +266,7 @@ In both components of this project, the results suggest that these features coul
 
 Even using a relatively small sample of posts, this model can be used to alert users when their post is likely to be low-quality.
 
-Because there is still a %10 chance or so of mis-classifying a post, the alert would likely need to be worded so as not to be definitively 'this is a bad post!'. Finding the right balance between being clear and being respectful would be paramount.
+Because there is still a %15 chance or so of mis-classifying a post, the alert would likely need to be worded so as not to be definitively 'this is a bad post!'. Finding the right balance between being clear and being respectful would be paramount.
 
 Assuming Stack Overflow has a vast collection of more data, a larger and more robust model could be built that could likely do even better at flagging low-quality posts.
 
@@ -262,11 +276,15 @@ Overall, the ability to alert users could save time (both human and on the techn
 
 Similarly, the tag prediction model here shows that it's possible to extend its use to creating a top-20 list of suggested tags, and that the predictions are accurate and will likely lead to users better tagging their posts.
 
-Based on analysis, using a model with data only from recent post history is likely the best choice, to make sure that up-to-date tag and question relationships are being included in the model.
+Based on analysis, using a model with data only from recent post history is likely the best choice, to make sure that up-to-date tag and question relationships are being included in the model. Also, the density of questions vs. time seems to be highest in the latest period of time (up to 2016) and would likely be even higher in more recent years.
 
 ## Limitations and Future Work
 
 Especially with the Tag Suggestion model, more work could likely be done to increase the various metrics and scores, and ensure that more of the 'true' tags are included in the predicted top-20 lists. More memory and computational resources would allow for larger and more in-depth modelling, and exploration of different, more expensive but possibly higher-performing models.
+
+* Specific to Tag Suggestion - The less-used tags are much harder to model and suggest accurately; this is likely also influencing the low-performing metrics for posts with >=3 tags, as I suspect that posts with only 1 or 2 tags use the more common tags, while the posts with more tags are more likely to have the less-used tags.
+
+***
 
 Beyond these models and goals, there are two areas I especially noticed might warrant further work.
 
@@ -292,16 +310,17 @@ Please review our full analysis in the EDA and prep/modelling notebooks in the .
 ├── README.md                           <- The top-level README for reviewers of this project
 ├── phase5-project.ipynb                <- Narrative documentation of analysis in Jupyter notebook
 ├── presentation.pdf                    <- PDF version of project presentation
+├── .gitignore                          <- Prevents upload of unwanted files
 ├── code
 │   ├── __init__.py                     <- .py file that signals to python these folders contain packages
 │   ├── visualizations.py               <- .py script to create finalized versions of visuals for project
 │   ├── data_preparation.py             <- .py script used to pre-process and clean data
 │   ├── eda_notebook.ipynb              <- Notebook containing data exploration
 │   └── prep_modelling_notebook.ipynb   <- Notebook containing data exploration
-├── data                                <- Both sourced externally and generated from code
+├── data                                
+│   ├── glove.6B.50d.txt                <- GLOVE file for W2V vectorization
+│   ├── QA_all                          <- folder for 'StackSample: 10% of Stack Overflow...' data
+│   ├── QA_python                       <- folder for 'Python Questions from Stack Overflow' data
+│   └── Quality_60k                     <- folder for '60k Stack Overflow Questions...' data
 └── images                              <- Both sourced externally and generated from code
 ```
-
-## Data sourcing
-
-To replicate this repository's results, simply unzip the data from the resources linked above into the respective folders inside ./data.
