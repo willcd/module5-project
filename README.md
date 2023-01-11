@@ -96,6 +96,9 @@ Based on EDA, I was able to find an optimal (or at least high-performing) method
 This can be seen in the first few columns above.
 
 ***
+
+### Modelling
+
 In order to test the model, I'll use the included holdout set.
 
 Since class imbalance is an issue, I opt to use the RandomOverSampler, so we can generate a balanced proportion of class '1' (high-quality) samples, so as to help the model train properly.
