@@ -332,7 +332,7 @@ Please review our full analysis in the EDA and prep/modelling notebooks in the .
 * <a id="https://minimaxir.com/2018/02/stack-overflow-questions/">Woolf, Max. (2018). A Visual Overview of Stack Overflow's Question Tags.</a>
 * <a id="http://codalism.com/research/papers/wmz10_tois.pdf">Webber, Moffat, and Zobel. (2010). A Similarity Measure for Indefinite Rankings.</a>
 * <a id="https://www.researchgate.net/profile/Mohammad-Sorower-2/publication/266888594_A_Literature_Survey_on_Algorithms_for_Multi-label_Learning/links/57fdb69308ae6750f80665b5/A-Literature-Survey-on-Algorithms-for-Multi-label-Learning.pdf">Sorower, Mohammad. (2023). A Literature Survey on Algorithms for Multi-label Learning.</a>
-* <a id="https://meta.stackexchange.com/questions/56817/can-we-prevent-some-of-the-low-quality-questions-from-entering-our-system">Atwood, Jeff. (2010). "Can we prevent some of the low-quality questions from entering our system?"</a>
+
 
 ## Repository Structure
 
